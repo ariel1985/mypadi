@@ -1,0 +1,104 @@
+<html>
+  <head>
+    <title>MyPadi - AI Assistant - Mental Health Support, Emergencies, Personal Questions, and AI Friendship.</title>
+        <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>MyPadi - Mental Health Support, Emergencies, Personal Questions, and AI Friendship</title>
+      <meta name="keywords" content="AI personal assistant, mental health, emergencies, personal questions, friendship">
+      </head>
+      <meta name="description" content="Get the support you need, when you need it. Our AI personal
+      assistant can provide mental health support, handle emergencies, answer personal questions, and act as a friendly companion. Try it now.">
+      <meta name="author" content="Daniel Nkemakolam">
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="css/bootstrap.min.css">
+      <!-- style css -->
+      <link rel="stylesheet" href="css/style.css">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="css/responsive.css">
+      <!-- fevicon -->
+      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <!-- Scrollbar Custom CSS -->
+      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+      <link rel="stylesheet" type="text/css" href="css/chatcss.css">
+  </head>
+  <body>
+    <div class="container">
+    <div class="header">
+               <div class="container-fluid">
+                  <div class="row">
+                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col logo_section">
+                        <div class="full">
+                           <div class="center-desk">
+                              <div class="logo">
+                                 <a href="index.html"><img src="images/logo2.png" alt="#"></a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+    <h1>MyPadi: Artificial Intelligence Support</h1>
+    
+<div id="instructions" >
+  <h2>Instructions</h2>
+  <ul>
+    <li>Enter any question in the input field</li>
+    <li>Click the "Ask" button to submit your question</li>
+    <li>View the response to your question in the "Response" section</li>
+    <li>You can ask any question related to mental health support, emergencies, personal questions, and MyPadi companionship</li>
+  </ul>
+</div>
+      <!-- label for="input">How can I help you? Enter any question:</label><br -->
+      <input type="text" id="input" name="input" class="form-control">
+      <button type="button" class="btn btn-primary" onclick="ask()">Ask</button>
+      <p>Response:</p>
+      <div id="response"></div>
+    </div>
+    <!-- Javascript-->
+      <script src="js/jquery.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/jquery-3.0.0.min.js"></script>
+      <script src="config.js"></script>
+    <script>
+      async function ask() {
+        const input = document.getElementById('input').value;
+        const url = 'https://api.openai.com/v1/completions';
+	responseElement = document.getElementById('response');
+	responseElement.innerHTML = "Please hold while we get an answer for you...  ";
+        const response = await fetch(url , {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': API_KEY,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+          },
+          body: JSON.stringify({
+            "prompt": input,
+            "model": "text-davinci-003",
+            "temperature": 0.9,
+	    "max_tokens": 150,
+	    "top_p": 1,
+	    "frequency_penalty": 0,
+  	    "presence_penalty": 0.6,
+	    "stop": [" Human:", " AI:"]
+	})
+        });
+        const result = await response.json();
+	let answer = 'No response. Please try again later.';
+	if ( result && result.choices && result.choices.length > 0) answer = result.choices[0].text
+	responseElement.innerHTML = answer;
+      }
+    </script>
+  </body>
+</html>
